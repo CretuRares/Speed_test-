@@ -1,0 +1,39 @@
+{
+    "aggregate": {
+        "threads": 4,
+        "total_bytes": 1132313600,
+        "total_duration_s": 10.000446319580078,
+        "data_sent": "1079.86 MByte",
+        "speed": "107.98 MByte/s"
+    },
+    "threads_results": [
+        {
+            "protocol": "UDP",
+            "bytes_sent": 283451392,
+            "duration_s": 10.00044584274292,
+            "data_sent": "270.32 MByte",
+            "speed": "27.03 MByte/s"
+        },
+        {
+            "protocol": "UDP",
+            "bytes_sent": 283568128,
+            "duration_s": 10.00044584274292,
+            "data_sent": "270.43 MByte",
+            "speed": "27.04 MByte/s"
+        },
+        {
+            "protocol": "UDP",
+            "bytes_sent": 282175488,
+            "duration_s": 10.000446319580078,
+            "data_sent": "269.10 MByte",
+            "speed": "26.91 MByte/s"
+        },
+        {
+            "protocol": "UDP",
+            "bytes_sent": 283118592,
+            "duration_s": 10.000376462936401,
+            "data_sent": "270.00 MByte",
+            "speed": "27.00 MByte/s"
+        }
+    ]
+}
