@@ -1,5 +1,6 @@
 import json
 import matplotlib.pyplot as plt
+from PIL import Image  # pentru deschidere imagine
 
 # JSON-ul generat de speedtest_client
 with open("speedtest_results.json", "r") as f:
@@ -44,3 +45,10 @@ print("\n=== AGGREGATE RESULTS ===")
 print(f"Data Sent: {agg_data}")
 print(f"Duration: {agg_duration:.2f} s")
 print(f"Average Speed: {agg_speed}")
+
+# Deschide imaginea automat pentru vizualizare
+try:
+    img = Image.open("speedtest_plot.png")
+    img.show()
+except Exception as e:
+    print(f"[ERROR] Nu s-a putut deschide imaginea: {e}")
