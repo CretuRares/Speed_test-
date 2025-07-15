@@ -69,7 +69,7 @@ def tcp_client_thread(host, port, duration, unit, file_name):
                     sock.sendall(data)
                     total_bytes += len(data)
         else:
-            data = b'x' * 4096
+            data = b'x' * 4096 #4Kb
             while time.time() - start_time < duration:
                 sock.sendall(data)
                 total_bytes += len(data)
