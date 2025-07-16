@@ -47,7 +47,7 @@ def threaded_random_write_test(filename, block_size_kb, num_threads, iterations_
 def disk_read(filename, block_size_kb):
     block_size = block_size_kb * 1024
     total_read = 0
-    
+
     start_time = time.time()
     with open(filename, 'rb') as f:
         while True:
@@ -118,7 +118,7 @@ if __name__ == '__main__':
         threaded_random_write_test(args.filename, args.block_size_kb, args.threads, args.iterations)
 
     if args.operation in ['read', 'both']:
-        print("\n---Sequential Read Test---")
+        print("\n\n\n---Sequential Read Test---")
         disk_read(args.filename, 1024)
         print("\n---Read Test---")
         disk_read(args.filename, args.block_size_kb)

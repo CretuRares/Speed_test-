@@ -4,6 +4,7 @@ import argparse
 import threading
 import json
 import os
+import random
 
 results = []
 lock = threading.Lock()
@@ -46,9 +47,9 @@ def tcp_client_thread(host, port, duration, unit, file_name):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((host, port))
 
-    # Trimite modul automat
+  
     if file_name:
-        sock.sendall(b'tpf')  # tcp file
+        sock.sendall(b'tpf')
     else:
         sock.sendall(b'tcp')
 
@@ -63,14 +64,17 @@ def tcp_client_thread(host, port, duration, unit, file_name):
                 return
             with open(file_name, 'rb') as f:
                 while time.time() - start_time < duration:
-                    data = f.read(4096)
+                    packet_size = random.randint(512, 4096)
+                    data = f.read(packet_size)
                     if not data:
                         break
                     sock.sendall(data)
                     total_bytes += len(data)
         else:
-            data = b'x' * 4096 #4Kb
+  
             while time.time() - start_time < duration:
+                packet_size = random.randint(512, 4096)
+                data = os.urandom(packet_size)
                 sock.sendall(data)
                 total_bytes += len(data)
     except Exception as e:
@@ -95,9 +99,9 @@ def tcp_client_thread(host, port, duration, unit, file_name):
 def udp_client_thread(host, port, duration, packet_size, unit, file_name):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    # Trimite modul automat
+
     if file_name:
-        sock.sendto(b'upf', (host, port))  # udp file
+        sock.sendto(b'upf', (host, port))
     else:
         sock.sendto(b'udp', (host, port))
 
@@ -112,14 +116,18 @@ def udp_client_thread(host, port, duration, packet_size, unit, file_name):
                 return
             with open(file_name, 'rb') as f:
                 while time.time() - start_time < duration:
-                    data = f.read(packet_size)
+                    packet_size_rand = random.randint(64, packet_size)
+                    data = f.read(packet_size_rand)
                     if not data:
                         break
                     sock.sendto(data, (host, port))
                     total_bytes += len(data)
+ 
         else:
-            data = b'x' * packet_size
+  
             while time.time() - start_time < duration:
+                packet_size_rand = random.randint(64, packet_size)
+                data = os.urandom(packet_size_rand)
                 sock.sendto(data, (host, port))
                 total_bytes += len(data)
     except Exception as e:
@@ -141,28 +149,28 @@ def udp_client_thread(host, port, duration, packet_size, unit, file_name):
         sock.close()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Speedtest Client with Auto File Transfer TCP/UDP")
+    parser = argparse.ArgumentParser(description="Speedtest Client TCP/UDP")
     parser.add_argument('--host', type=str, default='127.0.0.1', help="Server IP")
     parser.add_argument('--port', type=int, default=5201, help="Server port")
     parser.add_argument('--duration', type=int, default=10, help="Test duration")
     parser.add_argument('--mode', choices=['tcp', 'udp'], default='tcp', help="TCP or UDP")
-    parser.add_argument('--packet_size', type=int, default=1024, help="UDP packet size")
+    parser.add_argument('--packet_size', type=int, default=1024, help="UDP max packet size")
     parser.add_argument('--threads', type=int, default=1, help="Threads")
     parser.add_argument('--format', choices=['k', 'K', 'm', 'M'], default='M', help="Display units")
     parser.add_argument('--json', action='store_true', help="Output JSON")
     parser.add_argument('--file_name', type=str, help="File to send instead of random data")
     args = parser.parse_args()
 
-    threads = []
+    threads_list = []
     for _ in range(args.threads):
         if args.mode == 'tcp':
             t = threading.Thread(target=tcp_client_thread, args=(args.host, args.port, args.duration, args.format, args.file_name))
         else:
             t = threading.Thread(target=udp_client_thread, args=(args.host, args.port, args.duration, args.packet_size, args.format, args.file_name))
         t.start()
-        threads.append(t)
+        threads_list.append(t)
 
-    for t in threads:
+    for t in threads_list:
         t.join()
 
     if results:

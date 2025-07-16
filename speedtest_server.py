@@ -95,7 +95,7 @@ def udp_server(port):
             f.close()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Speedtest Server Auto Save File TCP/UDP")
+    parser = argparse.ArgumentParser(description="Speedtest Server TCP/UDP")
     parser.add_argument('--port', type=int, default=5201, help="Port to listen on")
     args = parser.parse_args()
 

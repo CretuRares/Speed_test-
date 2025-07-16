@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 from PIL import Image  # pentru deschidere imagine
 
-# JSON-ul generat de speedtest_client
+
 with open("speedtest_results.json", "r") as f:
     data = json.load(f)
 
